@@ -1,0 +1,39 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle with gradient -->
+  <defs>
+    <linearGradient id="outerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="leftSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#64748b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rightSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer circle border -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="url(#outerGradient)" stroke-width="4" opacity="0.8"/>
+  
+  <!-- Inner circle -->
+  <circle cx="100" cy="100" r="70" fill="#f8fafc"/>
+  
+  <!-- Left half (X) -->
+  <path d="M 100 30 A 70 70 0 0 1 100 170 Z" fill="url(#leftSide)"/>
+  
+  <!-- Right half (V) -->
+  <path d="M 100 30 A 70 70 0 0 0 100 170 Z" fill="url(#rightSide)"/>
+  
+  <!-- X letter -->
+  <g transform="translate(70, 80)">
+    <path d="M 5 10 L 25 30 M 25 10 L 5 30" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  
+  <!-- V letter -->
+  <g transform="translate(105, 80)">
+    <path d="M 5 10 L 15 30 L 25 10" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>
