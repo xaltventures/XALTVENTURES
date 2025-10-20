@@ -39,7 +39,7 @@ const Services: React.FC = () => {
 {
   icon: Cpu,
   title: 'AI Powered Automation and industrial IOT Solutions',
-  description: 'We empower industries to transition from legacy systems to Industry 4.0 and beyond through smart Industrial IoT, AI, and ERP solutions that enhance connectivity, efficiency, and real-time decision-making. By integrating AI-driven process automation with Industrial IoT solutions, we enable real-time monitoring and smart data-driven decision-making.',
+  description: 'We empower industries to transition from legacy systems to Industry 4.0 and beyond through smart Industrial IoT, AI, and ERP solutions that enhance connectivity, efficiency, and real-time decision-making. By integrating AI-driven process automation with Industrial IoT solutions, we enable real-time monitoring and smart data-driven decision making.',
   features: ['AI Industry 5.0 / Industrial IoT', 'AI Insights', 'Smart Operations']
 },
 {
