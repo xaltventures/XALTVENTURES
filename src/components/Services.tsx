@@ -60,7 +60,7 @@ const Services: React.FC = () => {
 {
   icon: BarChart3,
   title: 'Automate. Optimize. Grow ',
-  description: 'We empower your enterprise to make AI real, scalable, and accountable by uniting human and machine intelligence for orchestrated, explainable, and outcome-driven performance. With intelligent AI automation that connects systems, streamlines workflows, and drives real-time decisions — making your business smarter, faster, and effortlessly scalable',
+  description: 'We empower your enterprise to make AI real, scalable, and accountable by uniting human and machine intelligence for orchestrated, explainable, and outcome-driven performance. With intelligent AI automation that connects systems, streamlines workflows, and drives real-time decisions making your business smarter, faster, and effortlessly scalable',
   features: ['Automate complex workflows', 'Smart decision making', 'Scale operations']
 },
 {
