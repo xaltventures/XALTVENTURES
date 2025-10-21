@@ -9,6 +9,7 @@ import {
   Globe,
   Briefcase,
   Package,
+  Handshake,
   Play,Cpu,Plane,ShieldCheck,HeartHandshake
 } from 'lucide-react';
 
@@ -38,21 +39,21 @@ const Services: React.FC = () => {
 
 {
   icon: Cpu,
-  title: 'AI Powered Industry 4.0 and Industrial IOT Solutions',
+  title: 'Industry 4.0 and Industrial IOT Solutions',
   description: 'We empower industries to transition from legacy systems to Industry 4.0 and beyond through smart Industrial IOT, AI, and ERP solutions that enhance connectivity, efficiency, and real-time decision-making. By integrating AI-driven process automation with Industrial IoT solutions, we enable real-time monitoring and smart data-driven decision making.',
   features: ['AI Industry 5.0 / Industrial IoT', 'AI Insights', 'Smart Operations']
 },
 
 {
   icon: BarChart3,
-  title: 'Automate, Optimize, Grow with AI',
+  title: 'Automate, Optimize, Grow your Enterprise with AI',
   description: 'We empower your enterprise to make AI real, scalable, and accountable by uniting human and machine intelligence for orchestrated, explainable, and outcome-driven performance. With intelligent AI automation that connects systems, streamlines workflows, and drives real-time decisions making your business smarter, faster, and effortlessly scalable',
   features: ['Automate complex workflows', 'Smart decision making', 'Scale operations']
 },
 
 {
-  icon: Globe,
-  title: 'Global Product Development & Resource Outsourcing',
+  icon: Handshake,
+  title: 'Product Development & Resource Outsourcing',
   description: 'We deliver tailored software solutions designed to match unique business requirements through customized features, seamless system integration, and enhanced performance with bespoke APIs and configuration and scalable integrations. Get access to our ringfenced, high-performing software teams and scale your engineering capacity with world-class developers. ',
   features: ['Bespoke and tailored product development', 'Dedicated Development Teams', 'Flexible Resource Outsourcing']
 },
