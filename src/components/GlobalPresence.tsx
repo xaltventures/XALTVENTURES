@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Phone, Mail, Globe, Maximize2, Minimize2, ChevronLeft, ChevronRight, Building2, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MapPin, Globe, Maximize2, Minimize2, Phone, Mail, Clock } from 'lucide-react';
 
 // Extend Window interface for Leaflet
 declare global {
@@ -14,10 +14,11 @@ interface Office {
   country: string;
   address: string;
   coordinates: [number, number];
-  timezone: string;
+  color: string;
   phone: string;
   email: string;
-  color: string;
+  officeHours: string;
+  timezone: string;
 }
 
 const offices: Office[] = [
@@ -26,60 +27,57 @@ const offices: Office[] = [
     country: 'Australia',
     address: 'Level 27, 101 Collins Street, Melbourne, Victoria 3000, Australia',
     coordinates: [-37.8150, 144.9693],
-    timezone: 'AEST',
+    color: 'from-purple-600 via-pink-500 to-magenta-500',
     phone: '+61 3 9653 7364',
     email: 'contact.au@xaltventures.com',
-    color: 'from-purple-500 to-pink-500'
+    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
+    timezone: 'AEST'
   },
   {
     city: 'Xiamen',
     country: 'China',
     address: 'No.8304 Wanhai Rd 55, Siming District, Xiamen, Fujian 361000, China',
     coordinates: [24.4852, 118.1812],
-    timezone: 'CST',
+    color: 'from-blue-600 via-cyan-500 to-teal-500',
     phone: 'N/A',
     email: 'contact.cn@xaltventures.com',
-    color: 'from-blue-500 to-cyan-500'
+    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
+    timezone: 'CST'
   },
   {
     city: 'Doha',
     country: 'Qatar',
     address: 'P.O Box 55096, Doha-Qatar',
     coordinates: [25.2854, 51.5310],
-    timezone: 'AST',
+    color: 'from-amber-600 via-orange-500 to-red-500',
     phone: 'N/A',
     email: 'contact.qa@xaltventures.com',
-    color: 'from-amber-500 to-orange-500'
+    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
+    timezone: 'AST'
   },
   {
-    city: 'Nawala',
+    city: 'Colombo',
     country: 'Sri Lanka',
-    address: '29/17 Gunasekara Gardens Nawala, Sri Lanka',
+    address: '29/17 Gunasekara Gardens, Nawala, Colombo, Sri Lanka',
     coordinates: [6.8949, 79.8883],
-    timezone: 'IST',
-    phone: 'N/A',
+    color: 'from-emerald-600 via-teal-500 to-green-500',
+    phone: '+94 77 333 0888',
     email: 'contact.lk@xaltventures.com',
-    color: 'from-emerald-500 to-teal-500'
+    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
+    timezone: 'IST'
   }
 ];
 
 const GlobalPresence: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1); // -1 means no office selected
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const fullscreenMapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
+  const fullscreenMapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
-
-  const selectedOffice = offices[currentIndex];
-
-  const nextOffice = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % offices.length);
-  };
-
-  const prevOffice = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + offices.length) % offices.length);
-  };
+  const fullscreenMarkersRef = useRef<any[]>([]);
 
   // Load Leaflet
   useEffect(() => {
@@ -100,11 +98,11 @@ const GlobalPresence: React.FC = () => {
     loadLeaflet();
   }, []);
 
-  // Initialize map and markers once Leaflet is loaded
+  // Initialize main map
   useEffect(() => {
     if (isMapLoaded && mapRef.current && !mapInstanceRef.current) {
       initializeMap();
-      updateMarkers();
+      updateMarkers(mapInstanceRef, mapRef, markersRef);
     }
     return () => {
       if (mapInstanceRef.current) {
@@ -113,343 +111,275 @@ const GlobalPresence: React.FC = () => {
       }
     };
   }, [isMapLoaded]);
-  
+
+  // Handle map resize and state changes
   useEffect(() => {
     if (mapInstanceRef.current) {
-        panToSelectedOffice();
+      mapInstanceRef.current.invalidateSize();
+      if (currentIndex === -1) {
+        fitAllOffices(mapInstanceRef);
+      } else {
+        panToSelectedOffice(currentIndex, mapInstanceRef);
+      }
+      updateMarkers(mapInstanceRef, mapRef, markersRef);
     }
-  }, [currentIndex, isMapLoaded]);
+    if (fullscreenMapInstanceRef.current) {
+      fullscreenMapInstanceRef.current.invalidateSize();
+      if (currentIndex === -1) {
+        fitAllOffices(fullscreenMapInstanceRef);
+      } else {
+        panToSelectedOffice(currentIndex, fullscreenMapInstanceRef);
+      }
+      updateMarkers(fullscreenMapInstanceRef, fullscreenMapRef, fullscreenMarkersRef);
+    }
+  }, [isFullscreen, currentIndex, isMapLoaded]);
 
   const initializeMap = (): void => {
     if (!mapRef.current) return;
     mapInstanceRef.current = window.L.map(mapRef.current, {
-      center: offices[0].coordinates,
-      zoom: 1.5,
       zoomControl: true,
       scrollWheelZoom: true,
     });
     window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(mapInstanceRef.current);
+    fitAllOffices(mapInstanceRef);
   };
 
-  const updateMarkers = () => {
-    if (!mapInstanceRef.current) return;
+  const initializeFullscreenMap = (): void => {
+    if (!fullscreenMapRef.current || fullscreenMapInstanceRef.current) return;
+    fullscreenMapInstanceRef.current = window.L.map(fullscreenMapRef.current, {
+      zoomControl: true,
+      scrollWheelZoom: true,
+    });
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(fullscreenMapInstanceRef.current);
+    fitAllOffices(fullscreenMapInstanceRef);
+    updateMarkers(fullscreenMapInstanceRef, fullscreenMapRef, fullscreenMarkersRef);
+  };
+
+  const updateMarkers = (mapInstance: any, mapRef: React.RefObject<HTMLDivElement>, markersRef: React.MutableRefObject<any[]>) => {
+    if (!mapInstance.current) return;
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
     offices.forEach((office, index) => {
-        const customIcon = window.L.divIcon({
-          html: `
-            <div style="
-              background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-              width: 50px; height: 50px; border-radius: 50%;
-              border: 4px solid rgba(255, 255, 255, 0.3); 
-              box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5), 0 0 0 0 rgba(168, 85, 247, 0.4);
-              display: flex; align-items: center; justify-content: center;
-              cursor: pointer; position: relative;
-              animation: pulse 2s infinite;
-              padding: 8px;
-            ">
-              <img src="/favicon.svg" alt="Office" style="width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1);" />
-            </div>
-            <style>
-              @keyframes pulse {
-                0%, 100% {
-                  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5), 0 0 0 0 rgba(168, 85, 247, 0.4);
-                }
-                50% {
-                  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5), 0 0 0 20px rgba(168, 85, 247, 0);
-                }
-              }
-            </style>
-          `,
-          className: 'custom-xalt-marker',
-          iconSize: [50, 50],
-          iconAnchor: [25, 25],
-          popupAnchor: [0, -25]
+      const customIcon = window.L.divIcon({
+        html: `
+          <div style="
+            background: linear-gradient(135deg, ${office.color.split(' ')[0]}, ${office.color.split(' ')[2]}, ${office.color.split(' ')[4]});
+            width: ${currentIndex === index ? '30px' : '20px'};
+            height: ${currentIndex === index ? '30px' : '20px'};
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            animation: ${currentIndex === index ? 'pulse 1.8s infinite ease-in-out' : 'none'};
+          ">
+            <img src="/favicon.svg" style="
+              width: ${currentIndex === index ? '16px' : '10px'};
+              height: ${currentIndex === index ? '16px' : '10px'};
+              object-fit: contain;
+            " onerror="this.style.display='none';this.parentElement.style.background='white';" />
+          </div>
+          <style>
+            @keyframes pulse {
+              0%, 100% { transform: scale(1); opacity: 0.9; }
+              50% { transform: scale(1.15); opacity: 1; }
+            }
+          </style>
+        `,
+        className: 'custom-xalt-marker',
+        iconSize: [currentIndex === index ? 30 : 20, currentIndex === index ? 30 : 20],
+        iconAnchor: [currentIndex === index ? 15 : 10, currentIndex === index ? 15 : 10],
+        popupAnchor: [0, currentIndex === index ? -15 : -10]
+      });
+
+      const marker = window.L.marker(office.coordinates, { icon: customIcon })
+        .addTo(mapInstance.current)
+        .on('click', () => {
+          setCurrentIndex(index);
+          panToSelectedOffice(index, mapInstance);
         });
 
-        const marker = window.L.marker(office.coordinates, { icon: customIcon })
-          .addTo(mapInstanceRef.current)
-          .on('click', () => setCurrentIndex(index));
-        
-        markersRef.current.push(marker);
+      markersRef.current.push(marker);
     });
   };
 
-  const panToSelectedOffice = () => {
-    if (mapInstanceRef.current && selectedOffice) {
-        mapInstanceRef.current.flyTo(selectedOffice.coordinates, 14, {
-            animate: true,
-            duration: 1.5
-        });
+  const panToSelectedOffice = (index: number, mapInstance: any) => {
+    if (mapInstance.current && offices[index]) {
+      mapInstance.current.flyTo(offices[index].coordinates, 14, {
+        animate: true,
+        duration: 1.2
+      });
+    }
+  };
+
+  const fitAllOffices = (mapInstance: any) => {
+    if (mapInstance.current) {
+      const bounds = window.L.latLngBounds(offices.map(o => o.coordinates));
+      mapInstance.current.fitBounds(bounds, { padding: [60, 60], maxZoom: 6 });
     }
   };
 
   const toggleFullscreen = (): void => {
     setIsFullscreen(!isFullscreen);
-    setTimeout(() => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.invalidateSize();
-      }
-    }, 300);
+    if (!isFullscreen) {
+      setTimeout(() => {
+        initializeFullscreenMap();
+      }, 100);
+    } else if (fullscreenMapInstanceRef.current) {
+      fullscreenMapInstanceRef.current.remove();
+      fullscreenMapInstanceRef.current = null;
+      fullscreenMarkersRef.current = [];
+    }
   };
 
   return (
     <>
-      <section id="global" className="py-24 bg-gradient-to-br from-purple-50 via-white to-purple-100 text-slate-900 relative overflow-hidden">
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+          body {
+            font-family: 'Inter', sans-serif;
+          }
+          .card-shadow {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.2);
+          }
+          .card-shadow:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.3);
+          }
+        `}
+      </style>
+      <section id="global" className="py-16 bg-gradient-to-br from-purple-50/50 via-white to-purple-100/50 text-slate-900 relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-white/50 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 left-1/3 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/3 w-80 h-80 bg-purple-300/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className="text-center mb-12"
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 border border-purple-200 rounded-full mb-6"
-            >
-            </motion.div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-purple-800 to-purple-600 bg-clip-text text-transparent">
-              Our Global Presence
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent tracking-tight">
+              Global Presence
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Connecting opportunities worldwide from our strategic locations across four continents.
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-light">
+              Connecting opportunities from our strategic hubs worldwide.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-5 gap-8 items-start">
-            {/* Left Column: Office Cards */}
-            <div className="lg:col-span-2 space-y-6">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentIndex}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.4 }}
-                        className="relative"
-                    >
-                      {/* Gradient Border Effect */}
-                      <div className={`absolute inset-0 bg-gradient-to-r ${selectedOffice.color} rounded-3xl blur-xl opacity-30`}></div>
-                      
-                      <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-purple-100">
-                        <div className="flex items-start justify-between mb-6">
-                          <div>
-                            <h3 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                              {selectedOffice.city}
-                            </h3>
-                            <div className="flex items-center gap-2">
-                              <Globe className="w-4 h-4 text-purple-600" />
-                              <p className="text-purple-600 font-medium">{selectedOffice.country}</p>
-                            </div>
-                          </div>
-                          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedOffice.color} flex items-center justify-center shadow-lg`}>
-                            <Building2 className="w-8 h-8 text-white" />
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-4">
-                            <div className="group flex items-start gap-4 p-4 rounded-xl bg-purple-50/50 hover:bg-purple-100/50 transition-all duration-300">
-                                <MapPin className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-                                <p className="text-slate-700 leading-relaxed">{selectedOffice.address}</p>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 gap-3">
-                              <a href={`tel:${selectedOffice.phone}`} className="group flex items-center gap-4 p-4 rounded-xl bg-purple-50/50 hover:bg-purple-100/70 transition-all duration-300">
-                                  <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                                    <Phone className="w-5 h-5 text-purple-600" />
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-slate-500 uppercase font-medium">Phone</p>
-                                    <p className="text-slate-800 font-medium">{selectedOffice.phone}</p>
-                                  </div>
-                              </a>
-                              
-                              <a href={`mailto:${selectedOffice.email}`} className="group flex items-center gap-4 p-4 rounded-xl bg-purple-50/50 hover:bg-purple-100/70 transition-all duration-300">
-                                  <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                                    <Mail className="w-5 h-5 text-purple-600" />
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-xs text-slate-500 uppercase font-medium">Email</p>
-                                    <p className="text-slate-800 font-medium truncate">{selectedOffice.email}</p>
-                                  </div>
-                              </a>
-                            </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                </AnimatePresence>
-
-                {/* Office Hours Card */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="relative group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <div className="relative bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-center shadow-xl text-white">
-                    <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Clock className="w-7 h-7 text-white" />
-                    </div>
-                    <h4 className="font-bold text-lg mb-3">Office Hours</h4>
-                    <div className="space-y-1">
-                      <p className="text-purple-100 font-medium">Monday - Friday</p>
-                      <p className="text-2xl font-bold">9:00 AM - 5:00 PM</p>
-                      <p className="text-purple-100 text-sm mt-2">{selectedOffice.timezone} Time</p>
-                    </div>
-                  </div>
-                </motion.div>
-                
-                {/* Navigation */}
-                <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-purple-100 overflow-hidden shadow-lg">
-                    {/* Animated Background Gradient */}
-                    <motion.div 
-                      className={`absolute inset-0 bg-gradient-to-r ${selectedOffice.color} opacity-5`}
-                      animate={{ 
-                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                      }}
-                      transition={{ 
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                    />
-                    
-                    <div className="relative flex justify-between items-center">
-                      <button 
-                        onClick={prevOffice} 
-                        className="group relative p-4 rounded-xl bg-purple-100 hover:bg-purple-200 transition-all duration-300 hover:scale-110 overflow-hidden"
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-r ${selectedOffice.color} opacity-0 group-hover:opacity-20 transition-opacity`} />
-                        <ChevronLeft className="relative w-6 h-6 text-purple-600 group-hover:text-purple-700 transition-colors" />
-                      </button>
-                      
-                      {/* Advanced Progress Bar */}
-                      <div className="flex-1 mx-6">
-                        <div className="relative h-3 bg-purple-100 rounded-full overflow-hidden backdrop-blur-sm">
-                          {/* Background shimmer effect */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
-                          
-                          {/* Progress fill */}
-                          <motion.div 
-                            className={`absolute inset-y-0 left-0 bg-gradient-to-r ${selectedOffice.color} rounded-full shadow-lg`}
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${((currentIndex + 1) / offices.length) * 100}%` }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                          >
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent" />
-                          </motion.div>
-                          
-                          {/* Active indicator dot */}
-                          <motion.div
-                            className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-xl border-2 border-purple-200"
-                            initial={{ left: '0%' }}
-                            animate={{ left: `calc(${((currentIndex + 1) / offices.length) * 100}% - 10px)` }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                          >
-                            <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${selectedOffice.color} animate-ping opacity-75`} />
-                            <div className={`absolute inset-1 rounded-full bg-gradient-to-r ${selectedOffice.color}`} />
-                          </motion.div>
-                        </div>
-                        
-                        {/* Office name labels */}
-                        <div className="flex justify-between mt-3">
-                          {offices.map((office, index) => (
-                            <motion.button
-                              key={index}
-                              onClick={() => setCurrentIndex(index)}
-                              className={`text-xs transition-all duration-300 ${
-                                index === currentIndex 
-                                  ? 'text-purple-600 font-bold scale-110' 
-                                  : 'text-slate-500 hover:text-slate-700'
-                              }`}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              {office.city}
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <button 
-                        onClick={nextOffice} 
-                        className="group relative p-4 rounded-xl bg-purple-100 hover:bg-purple-200 transition-all duration-300 hover:scale-110 overflow-hidden"
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-r ${selectedOffice.color} opacity-0 group-hover:opacity-20 transition-opacity`} />
-                        <ChevronRight className="relative w-6 h-6 text-purple-600 group-hover:text-purple-700 transition-colors" />
-                      </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Right Column: Interactive Map */}
+          <div className="flex flex-col gap-6">
+            {/* Interactive Map */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
               viewport={{ once: true }}
-              className="lg:col-span-3 relative"
+              className="relative"
             >
-              <div className="relative">
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-200/50 to-purple-300/50 rounded-3xl blur-2xl"></div>
-                
-                <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-purple-100">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-800">Our {selectedOffice.city} Office</h3>
-                      <p className="text-sm text-slate-600">{selectedOffice.country}</p>
-                    </div>
-                    <button 
-                      onClick={toggleFullscreen} 
-                      className="p-3 hover:bg-purple-100 rounded-xl transition-all duration-300 hover:scale-110 group" 
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-200/30 to-purple-300/30 rounded-2xl blur-xl opacity-50"></div>
+              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-purple-100/50">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Global Offices</h3>
+                    <p className="text-sm text-slate-600 font-light">Select a marker or card to explore</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => fitAllOffices(mapInstanceRef)}
+                      className="p-2.5 bg-purple-50/50 hover:bg-purple-100/70 rounded-lg transition-all duration-300 hover:scale-105 group"
+                      title="View all offices"
+                    >
+                      <Globe className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                    </button>
+                    <button
+                      onClick={toggleFullscreen}
+                      className="p-2.5 bg-purple-50/50 hover:bg-purple-100/70 rounded-lg transition-all duration-300 hover:scale-105 group"
                       title="Toggle fullscreen"
                     >
-                      {isFullscreen ? 
-                        <Minimize2 className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" /> : 
+                      {isFullscreen ? (
+                        <Minimize2 className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                      ) : (
                         <Maximize2 className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
-                      }
+                      )}
                     </button>
                   </div>
-                  
-                  <div className="relative bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-lg">
-                    <div ref={mapRef} className="w-full h-[500px]" />
-                    {!isMapLoaded && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white">
-                        <div className="text-center">
-                          <div className="relative w-16 h-16 mx-auto mb-4">
-                            <div className="absolute inset-0 border-4 border-purple-200 rounded-full"></div>
-                            <div className="absolute inset-0 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                          </div>
-                          <p className="text-slate-600 font-medium">Loading map...</p>
+                </div>
+                <div className="relative bg-white rounded-xl overflow-hidden border border-purple-100/50 shadow-md">
+                  <div ref={mapRef} className="w-full h-[400px]" />
+                  {!isMapLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/95">
+                      <div className="text-center">
+                        <div className="relative w-12 h-12 mx-auto mb-3">
+                          <div className="absolute inset-0 border-2 border-purple-200 rounded-full"></div>
+                          <div className="absolute inset-0 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
                         </div>
+                        <p className="text-slate-600 font-medium text-sm">Loading map...</p>
                       </div>
-                    )}
-                  </div>
-                  
-                  <div className="mt-5 flex items-center justify-center gap-2 text-sm text-slate-600">
-                    <span className="inline-block w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
-                    <span>Click markers to explore our offices</span>
-                  </div>
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-600">
+                  <span className="inline-block w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+                  <span>Click markers to explore our offices</span>
                 </div>
               </div>
             </motion.div>
+
+            {/* Office Cards in a Row */}
+            <div className="flex flex-row gap-4 justify-center">
+              {offices.map((office, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+                  viewport={{ once: true }}
+                  className={`flex-1 min-w-0 max-w-xs bg-white/75 backdrop-blur-xl rounded-xl p-6 border border-purple-100/20 card-shadow cursor-pointer group hover:scale-105 hover:bg-white/85 transition-all duration-300 ${currentIndex === index ? 'ring-2 ring-purple-500/50' : ''}`}
+                  onClick={() => {
+                    setCurrentIndex(index);
+                    panToSelectedOffice(index, mapInstanceRef);
+                    if (isFullscreen) panToSelectedOffice(index, fullscreenMapInstanceRef);
+                  }}
+                >
+                  <div className={`h-1.5 w-full rounded-t-xl bg-gradient-to-r ${office.color} mb-4 group-hover:opacity-90 transition-opacity`}></div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">{office.city}</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-purple-600" />
+                      <p className="text-purple-600 font-medium text-sm">{office.country}</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <MapPin className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-slate-700 text-sm leading-relaxed">{office.address}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-purple-600" />
+                      <p className="text-slate-700 text-sm">{office.phone}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-purple-600" />
+                      <a href={`mailto:${office.email}`} className="text-slate-700 text-sm truncate hover:underline">{office.email}</a>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Clock className="w-4 h-4 text-purple-600 mt-0.5" />
+                      <div>
+                        <p className="text-slate-700 text-sm">{office.officeHours}</p>
+                        <p className="text-slate-600 text-sm">{office.timezone} Time</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -460,23 +390,31 @@ const GlobalPresence: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-gray-900/95 backdrop-blur-md flex items-center justify-center p-4"
         >
           <motion.div
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.95 }}
-            className="bg-slate-900 rounded-3xl shadow-2xl w-full h-full max-w-7xl max-h-[95vh] relative overflow-hidden border border-slate-700"
+            className="bg-white/95 rounded-2xl shadow-2xl w-full h-full max-w-[95vw] max-h-[95vh] relative overflow-hidden border border-purple-100/50"
           >
-            <div className="absolute top-6 right-6 z-20">
-              <button 
-                onClick={toggleFullscreen} 
-                className="bg-slate-800 hover:bg-slate-700 backdrop-blur-xl rounded-2xl p-4 shadow-xl transition-all duration-300 hover:scale-110 border border-slate-700"
+            <div className="absolute top-4 right-4 z-20 flex gap-3">
+              <button
+                onClick={() => fitAllOffices(fullscreenMapInstanceRef)}
+                className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-purple-100/50"
+                title="View all offices"
               >
-                <Minimize2 className="w-6 h-6 text-white" />
+                <Globe className="w-5 h-5 text-purple-600" />
+              </button>
+              <button
+                onClick={toggleFullscreen}
+                className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-purple-100/50"
+                title="Exit fullscreen"
+              >
+                <Minimize2 className="w-5 h-5 text-purple-600" />
               </button>
             </div>
-            <div ref={isFullscreen ? mapRef : undefined} className="w-full h-full" />
+            <div ref={fullscreenMapRef} className="w-full h-full" />
           </motion.div>
         </motion.div>
       )}

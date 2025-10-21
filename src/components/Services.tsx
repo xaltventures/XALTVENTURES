@@ -38,10 +38,26 @@ const Services: React.FC = () => {
 
 {
   icon: Cpu,
-  title: 'AI Powered Automation and industrial IOT Solutions',
-  description: 'We empower industries to transition from legacy systems to Industry 4.0 and beyond through smart Industrial IoT, AI, and ERP solutions that enhance connectivity, efficiency, and real-time decision-making. By integrating AI-driven process automation with Industrial IoT solutions, we enable real-time monitoring and smart data-driven decision making.',
+  title: 'AI Powered Industry 4.0 and Industrial IOT Solutions',
+  description: 'We empower industries to transition from legacy systems to Industry 4.0 and beyond through smart Industrial IOT, AI, and ERP solutions that enhance connectivity, efficiency, and real-time decision-making. By integrating AI-driven process automation with Industrial IoT solutions, we enable real-time monitoring and smart data-driven decision making.',
   features: ['AI Industry 5.0 / Industrial IoT', 'AI Insights', 'Smart Operations']
 },
+
+{
+  icon: BarChart3,
+  title: 'Automate, Optimize, Grow with AI',
+  description: 'We empower your enterprise to make AI real, scalable, and accountable by uniting human and machine intelligence for orchestrated, explainable, and outcome-driven performance. With intelligent AI automation that connects systems, streamlines workflows, and drives real-time decisions making your business smarter, faster, and effortlessly scalable',
+  features: ['Automate complex workflows', 'Smart decision making', 'Scale operations']
+},
+
+{
+  icon: Globe,
+  title: 'Global Product Development & Resource Outsourcing',
+  description: 'We deliver tailored software solutions designed to match unique business requirements through customized features, seamless system integration, and enhanced performance with bespoke APIs and configuration and scalable integrations. Get access to our ringfenced, high-performing software teams and scale your engineering capacity with world-class developers. ',
+  features: ['Bespoke and tailored product development', 'Dedicated Development Teams', 'Flexible Resource Outsourcing']
+},
+
+
 {
   icon: Plane,
   title: 'Aviation Safety & Quality Database',
@@ -57,12 +73,7 @@ const Services: React.FC = () => {
 
 // Existing 6 services
 
-{
-  icon: BarChart3,
-  title: 'Automate. Optimize. Grow ',
-  description: 'We empower your enterprise to make AI real, scalable, and accountable by uniting human and machine intelligence for orchestrated, explainable, and outcome-driven performance. With intelligent AI automation that connects systems, streamlines workflows, and drives real-time decisions making your business smarter, faster, and effortlessly scalable',
-  features: ['Automate complex workflows', 'Smart decision making', 'Scale operations']
-},
+
 {
   icon: HeartHandshake,
   title: 'Romance. Adventure. Luxury.',
@@ -233,19 +244,19 @@ const Services: React.FC = () => {
                 <img 
                   src="/althinect_logo_1.png" 
                   alt="Althinect" 
-                  onClick={() => setSelectedPartner('althinect')}
+                  onMouseEnter={() => setSelectedPartner('althinect')}
                   className="h-8 md:h-12 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
                   src="/louis_bianco_logo.png" 
                   alt="Louis Bianco" 
-                  onClick={() => setSelectedPartner('louis_bianco')}
+                  onMouseEnter={() => setSelectedPartner('louis_bianco')}
                   className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
                   src="/sierra_logo.png" 
                   alt="Sierra" 
-                  onClick={() => setSelectedPartner('sierra')}
+                  onMouseEnter={() => setSelectedPartner('sierra')}
                   className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
               </div>
@@ -254,19 +265,19 @@ const Services: React.FC = () => {
                 <img 
                   src="/althinect_logo_1.png" 
                   alt="Althinect" 
-                  onClick={() => setSelectedPartner('althinect')}
+                  onMouseEnter={() => setSelectedPartner('althinect')}
                   className="h-8 md:h-12 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
                   src="/louis_bianco_logo.png" 
                   alt="Louis Bianco" 
-                  onClick={() => setSelectedPartner('louis_bianco')}
+                  onMouseEnter={() => setSelectedPartner('louis_bianco')}
                   className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
                   src="/sierra_logo.png" 
                   alt="Sierra" 
-                  onClick={() => setSelectedPartner('sierra')}
+                  onMouseEnter={() => setSelectedPartner('sierra')}
                   className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
               </div>
@@ -274,7 +285,7 @@ const Services: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Partner Info Modal */}
+        {/* Partner Info Modal (CHANGES APPLIED) */}
         {selectedPartner && (
           <div 
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
@@ -284,12 +295,12 @@ const Services: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-white rounded-3xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto" // <-- CHANGED max-w-2xl to max-w-xl
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-8">
+              <div className="p-6"> {/* <-- CHANGED p-8 to p-6 */}
                 {/* Header with Logo and Close Button */}
-                <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="flex justify-between items-center gap-4 mb-4"> {/* <-- CHANGED justify-end and mb-6 to mb-4 */}
                   <img 
                     src={
                       selectedPartner === 'althinect' ? '/althinect_logo_1.png' :
@@ -299,8 +310,8 @@ const Services: React.FC = () => {
                     alt={partnerInfo[selectedPartner as keyof typeof partnerInfo].name}
                     className={
                       selectedPartner === 'althinect' 
-                      ? 'h-8 md:h-12 object-contain' // <-- Smaller size for Althinect
-                      : 'h-16 md:h-20 object-contain' // <-- Original larger size for others
+                      ? 'h-8 object-contain' // <-- CHANGED md:h-12 to h-8
+                      : 'h-12 object-contain' // <-- CHANGED h-16 md:h-20 to h-12
                     }
                   />
                   <button
@@ -317,34 +328,34 @@ const Services: React.FC = () => {
                   
                     <a href={
                       selectedPartner === 'althinect' ? 'https://althinect.com' :
-                      selectedPartner === 'louis_bianco' ? 'https://louisbianco.com.au' :
+                      selectedPartner === 'louis_bianco' ? 'https://louis_bianco.com.au' :
                       'https://construction.sierra.lk/service/telecommunication-engineering/'
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-3xl font-bold text-slate-800 hover:text-purple-600 transition-colors inline-flex items-center gap-2 mb-2"
+                    className="text-2xl font-bold text-slate-800 hover:text-purple-600 transition-colors inline-flex items-center gap-2 mb-1" // <-- CHANGED text-3xl and mb-2
                   >
                     {partnerInfo[selectedPartner as keyof typeof partnerInfo].name}
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> {/* <-- CHANGED w-5 h-5 */}
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                   </a>
-                  <p className="text-lg text-purple-600 font-semibold mb-6">
+                  <p className="text-md text-purple-600 font-semibold mb-4"> {/* <-- CHANGED text-lg and mb-6 */}
                     {partnerInfo[selectedPartner as keyof typeof partnerInfo].title}
                   </p>
                   
-                  <p className="text-slate-600 leading-relaxed mb-6">
+                  <p className="text-slate-600 leading-relaxed mb-4 text-sm"> {/* <-- CHANGED mb-6 and added text-sm */}
                     {partnerInfo[selectedPartner as keyof typeof partnerInfo].description}
                   </p>
 
                   {/* Services/Offerings */}
-                  <div className="mb-6">
-                    <h4 className="text-xl font-bold text-slate-800 mb-4">Services & Solutions</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="mb-4"> {/* <-- CHANGED mb-6 */}
+                    <h4 className="text-lg font-bold text-slate-800 mb-3">Services & Solutions</h4> {/* <-- CHANGED text-xl and mb-4 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2"> {/* <-- CHANGED gap-3 */}
                       {partnerInfo[selectedPartner as keyof typeof partnerInfo].services.map((service, idx) => (
                         <div key={idx} className="flex items-start">
-                          <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                          <span className="text-slate-600">{service}</span>
+                          <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2.5 mt-2 flex-shrink-0"></div> {/* <-- Made dot smaller */}
+                          <span className="text-slate-600 text-sm">{service}</span> {/* <-- Added text-sm */}
                         </div>
                       ))}
                     </div>
@@ -352,43 +363,43 @@ const Services: React.FC = () => {
 
                   {/* Additional Info */}
                   {'sectors' in partnerInfo[selectedPartner as keyof typeof partnerInfo] && (
-                    <div className="bg-purple-50 rounded-xl p-4 mb-4">
-                      <h4 className="font-semibold text-slate-800 mb-2">Key Sectors</h4>
-                      <p className="text-slate-600">
+                    <div className="bg-purple-50 rounded-xl p-3 mb-3"> {/* <-- CHANGED p-4 and mb-4 */}
+                      <h4 className="font-semibold text-slate-800 mb-1 text-sm">Key Sectors</h4> {/* <-- CHANGED mb-2 and added text-sm */}
+                      <p className="text-slate-600 text-sm"> {/* <-- Added text-sm */}
                         {(partnerInfo[selectedPartner as keyof typeof partnerInfo] as any).sectors.join(' • ')}
                       </p>
                     </div>
                   )}
 
                   {'locations' in partnerInfo[selectedPartner as keyof typeof partnerInfo] && (
-                    <div className="bg-purple-50 rounded-xl p-4 mb-4">
-                      <h4 className="font-semibold text-slate-800 mb-2">Locations</h4>
+                    <div className="bg-purple-50 rounded-xl p-3 mb-3"> {/* <-- CHANGED p-4 and mb-4 */}
+                      <h4 className="font-semibold text-slate-800 mb-1 text-sm">Locations</h4> {/* <-- CHANGED mb-2 and added text-sm */}
                       {(partnerInfo[selectedPartner as keyof typeof partnerInfo] as any).locations.map((loc: string, idx: number) => (
-                        <p key={idx} className="text-slate-600">{loc}</p>
+                        <p key={idx} className="text-slate-600 text-sm">{loc}</p> /* <-- Added text-sm */
                       ))}
                     </div>
                   )}
 
                   {'experience' in partnerInfo[selectedPartner as keyof typeof partnerInfo] && (
-                    <div className="bg-purple-50 rounded-xl p-4 mb-4">
-                      <h4 className="font-semibold text-slate-800 mb-2">Experience</h4>
-                      <p className="text-slate-600">
+                    <div className="bg-purple-50 rounded-xl p-3 mb-3"> {/* <-- CHANGED p-4 and mb-4 */}
+                      <h4 className="font-semibold text-slate-800 mb-1 text-sm">Experience</h4> {/* <-- CHANGED mb-2 and added text-sm */}
+                      <p className="text-slate-600 text-sm"> {/* <-- Added text-sm */}
                         {(partnerInfo[selectedPartner as keyof typeof partnerInfo] as any).experience}
                       </p>
                     </div>
                   )}
 
                   {/* Visit Website Link */}
-                  <div className="mt-6 pt-6 border-t border-slate-200">
+                  <div className="mt-4 pt-4 border-t border-slate-200"> {/* <-- CHANGED mt-6 and pt-6 */}
 
                      <a href={
                         selectedPartner === 'althinect' ? 'https://althinect.com' :
-                        selectedPartner === 'louis_bianco' ? 'https://louisbianco.com.au' :
+                        selectedPartner === 'louis_bianco' ? 'https://louis_bianco.com.au' :
                         'https://construction.sierra.lk/service/telecommunication-engineering/'
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold rounded-full hover:from-purple-700 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                      className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold rounded-full hover:from-purple-700 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm" // <-- CHANGED px-6, py-3 and added text-sm
                     >
                       Visit Website
                       <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -416,6 +427,8 @@ const Services: React.FC = () => {
             Get Started Today
             <TrendingUp className="w-5 h-5 ml-2" />
           </a>
+        
+      
         </motion.div>
       </div>
     </section>
