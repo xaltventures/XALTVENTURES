@@ -52,7 +52,7 @@ const offices: Office[] = [
     color: 'from-amber-600 via-orange-500 to-red-500',
     phone: 'N/A',
     email: 'contact.qa@xaltventures.com',
-    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
+    officeHours: 'Monday - Thursday, 9:00 AM - 5:00 PM',
     timezone: 'AST'
   },
   {
