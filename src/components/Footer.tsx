@@ -51,9 +51,9 @@ const Footer: React.FC = () => {
                 className="flex items-center space-x-3 mb-6"
               >
                 <img 
-                  src="/Screenshot 2025-09-01 at 07.51.04.png" 
-                  alt="Xalt Ventures Logo" 
-                  className="w-12 h-12"
+                  src="/1.svg" 
+                  alt="Xalt Ventures xalt_logo" 
+                  className="w-20 h-20"
                 />
                 <div className="flex flex-col items-start">
                   <div className="flex items-center leading-none">
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
               <ul className="space-y-3">
-                {['about', 'Services', 'global', 'Contact'].map((link) => (
+                {['About', 'Services', 'Global', 'Contact'].map((link) => (
                   <li key={link}>
                     <a href={`#${link.toLowerCase().replace(' ', '')}`} className="text-gray-300 hover:text-white transition-colors duration-200">
                       {link}

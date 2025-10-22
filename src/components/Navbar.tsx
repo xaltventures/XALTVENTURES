@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* xalt_logo */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -43,9 +43,9 @@ const Navbar: React.FC = () => {
             className="flex items-center space-x-3"
           >
             <img 
-              src="/logo.svg" 
-              alt="Xalt Ventures Logo" 
-              className="w-10 h-10"
+              src="/1.svg" 
+              alt="Xalt Ventures xalt_logo" 
+              className="w-30 h-20 translate-x-2 translate-y-1"
             />
             <div className="flex flex-col">
               <div className="flex items-center">

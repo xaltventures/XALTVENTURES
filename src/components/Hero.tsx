@@ -29,9 +29,9 @@ const Hero: React.FC = () => {
           className="mb-6"
         >
           <img 
-            src="/logo.svg" 
-            alt="Xalt Ventures Logo" 
-            className="w-16 h-16 mx-auto mb-4"
+            src="/2.svg" 
+            alt="Xalt Ventures xalt_logo" 
+            className="w-80 h-40 mx-auto mb-4"
           />
         </motion.div>
 

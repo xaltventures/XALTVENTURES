@@ -10,7 +10,7 @@ import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] =useState(true);
 
   useEffect(() => {
     // Simulate initial loading
@@ -32,24 +32,25 @@ function App() {
             className="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center"
           >
             <div className="text-center">
+              {/* --- CHANGES START HERE --- */}
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ duration: 1, ease: 'easeOut' }}
-                className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-800 rounded-full flex items-center justify-center mx-auto mb-6"
+                className="w-25 h-25 rounded-full flex items-center justify-center mx-auto mb-3" // <-- RESTORED w-25 h-25, kept tight margin
               >
                 <img 
-                  src="/logo.svg" 
-                  alt="Xalt Ventures Logo" 
-                  className="w-16 h-16"
+                  src="/2.svg" 
+                  alt="Xalt Ventures xalt_logo" 
+                  className="w-80 h-40" // <-- RESTORED w-25 h-25
                 />
               </motion.div>
               
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-2xl font-bold text-white mb-2"
+                className="text-2xl font-bold text-white mb-1"
               >
                 XALT VENTURES
               </motion.h1>
@@ -58,7 +59,7 @@ function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
-                className="text-purple-300"
+                className="text-purple-300 mb-3"
               >
                 Discover Your Potential with Us
               </motion.p>
@@ -67,8 +68,9 @@ function App() {
                 initial={{ width: 0 }}
                 animate={{ width: '200px' }}
                 transition={{ delay: 1.2, duration: 0.8 }}
-                className="h-1 bg-gradient-to-r from-purple-400 to-amber-400 mx-auto mt-6 rounded-full"
+                className="h-1 bg-gradient-to-r from-purple-400 to-amber-400 mx-auto rounded-full"
               />
+              {/* --- CHANGES END HERE --- */}
             </div>
           </motion.div>
         )}

@@ -29,7 +29,7 @@ const offices: Office[] = [
     coordinates: [-37.8150, 144.9693],
     color: 'from-purple-600 via-pink-500 to-magenta-500',
     phone: '+61 3 9653 7364',
-    email: 'contact.au@xaltventures.com',
+    email: 'contact@xaltventures.com',
     officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
     timezone: 'AEST'
   },
@@ -40,7 +40,7 @@ const offices: Office[] = [
     coordinates: [24.4852, 118.1812],
     color: 'from-blue-600 via-cyan-500 to-teal-500',
     phone: 'N/A',
-    email: 'contact.cn@xaltventures.com',
+    email: 'contact@xaltventures.com',
     officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
     timezone: 'CST'
   },
@@ -51,7 +51,7 @@ const offices: Office[] = [
     coordinates: [25.2854, 51.5310],
     color: 'from-amber-600 via-orange-500 to-red-500',
     phone: 'N/A',
-    email: 'contact.qa@xaltventures.com',
+    email: 'contact@xaltventures.com',
     officeHours: 'Monday - Thursday, 9:00 AM - 5:00 PM',
     timezone: 'AST'
   },
@@ -62,7 +62,7 @@ const offices: Office[] = [
     coordinates: [6.8949, 79.8883],
     color: 'from-emerald-600 via-teal-500 to-green-500',
     phone: '+94 77 333 0888',
-    email: 'contact.lk@xaltventures.com',
+    email: 'contact@xaltventures.com',
     officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
     timezone: 'IST'
   }
