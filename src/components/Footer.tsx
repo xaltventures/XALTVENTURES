@@ -1,41 +1,47 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Mail, Phone, MapPin } from 'lucide-react';
+import PrivacyPolicyModal from './PrivacyPolicyModal'; // <-- Import new component
+
 
 const Footer: React.FC = () => {
   const [showCookieBanner, setShowCookieBanner] = useState(true);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false); // <-- Add state for modal
 
   return (
     <>
       {/* Cookie Banner */}
-      {showCookieBanner && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-0 left-0 right-0 z-50 bg-slate-800 border-t border-slate-700 p-4"
-        >
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-300 text-sm">
-              We use cookies to analyze traffic and optimize your experience.
-            </p>
-            <div className="flex space-x-3">
-              <button
-                onClick={() => setShowCookieBanner(false)}
-                className="px-4 py-2 text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Decline
-              </button>
-              <button
-                onClick={() => setShowCookieBanner(false)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
-              >
-                Accept All
-              </button>
+      <AnimatePresence>
+        {showCookieBanner && (
+          <motion.div
+            key="cookie-banner" // <-- Add key for AnimatePresence
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 z-50 bg-slate-800 border-t border-slate-700 p-4"
+          >
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-gray-300 text-sm">
+                We use cookies to analyze traffic and optimize your experience.
+              </p>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowCookieBanner(false)}
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors text-sm"
+                >
+                  Decline
+                </button>
+                <button
+                  onClick={() => setShowCookieBanner(false)}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                >
+                  Accept All
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Footer */}
       <footer className="bg-slate-900 text-white">
@@ -78,7 +84,7 @@ const Footer: React.FC = () => {
                 <a href="#" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors duration-300">
                   <Globe className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors duration-300">
+                <a href="mailto:contact@xaltventures.com" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors duration-300">
                   <Mail className="w-5 h-5" />
                 </a>
               </div>
@@ -102,9 +108,16 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-lg font-semibold mb-6">Legal</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Terms of Service</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Cookie Policy</a></li>
+                <li>
+                  {/* --- MODIFIED LINK --- */}
+                  <button
+                    onClick={() => setIsPrivacyModalOpen(true)}
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-left"
+                  >
+                    Privacy Policy
+                  </button>
+                  {/* --- END MODIFICATION --- */}
+                </li>
               </ul>
             </div>
           </div>
@@ -120,8 +133,20 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* --- ADD MODAL --- */}
+      <AnimatePresence>
+        {isPrivacyModalOpen && (
+          <PrivacyPolicyModal 
+            key="privacy-modal" 
+            onClose={() => setIsPrivacyModalOpen(false)} 
+          />
+        )}
+      </AnimatePresence>
+      {/* --- END ADDITION --- */}
     </>
   );
 };
 
 export default Footer;
+

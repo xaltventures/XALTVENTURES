@@ -1,26 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Send, Upload, Check } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
   file?: FileList;
+  recaptcha: string; // <-- Add recaptcha field
 }
+
+// ---
+// IMPORTANT: Replace this with your own reCAPTCHA v2 Site Key
+// You can get one from the Google reCAPTCHA admin console.
+// This is Google's official test key and will always pass.
+// ---
+const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
 
 const ContactForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+  const recaptchaRef = useRef<ReCAPTCHA>(null); // <-- Create ref for reCAPTCHA
+
+  // <-- Add 'control' from useForm
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    // Simulate form submission
+    // In a real app, you would send data.recaptcha (the token) to your backend.
+    // Your backend would then verify this token with Google's API.
     console.log('Form submitted:', data);
+    
     setIsSubmitted(true);
+    
     setTimeout(() => {
       setIsSubmitted(false);
-      reset();
+      recaptchaRef.current?.reset(); // <-- Reset the reCAPTCHA widget
+      reset(); // <-- Reset the form fields
     }, 3000);
   };
 
@@ -131,14 +147,26 @@ const ContactForm: React.FC = () => {
                 </div>
               </div>
 
-              {/* reCAPTCHA Placeholder */}
-              <div className="flex items-center space-x-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
-                <div className="w-6 h-6 border-2 border-slate-300 rounded bg-white"></div>
-                <span className="text-sm text-slate-600">I'm not a robot</span>
-                <div className="ml-auto">
-                  <div className="text-xs text-slate-400">reCAPTCHA</div>
-                </div>
+              {/* --- reCAPTCHA Component --- */}
+              <div>
+                <Controller
+                  name="recaptcha"
+                  control={control}
+                  rules={{ required: 'Please complete the reCAPTCHA' }}
+                  render={({ field: { onChange } }) => (
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={RECAPTCHA_SITE_KEY}
+                      onChange={onChange} // This sets the token value in the form state
+                    />
+                  )}
+                />
+                {errors.recaptcha && (
+                  <p className="text-red-500 text-sm mt-1">{errors.recaptcha.message}</p>
+                )}
               </div>
+              {/* --- End reCAPTCHA --- */}
+
 
               <motion.button
                 type="submit"
@@ -158,3 +186,4 @@ const ContactForm: React.FC = () => {
 };
 
 export default ContactForm;
+

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { motion, useMotionValue} from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 import { Target, Users, Globe, TrendingUp, Sparkles, ArrowRight, Star, Zap } from 'lucide-react';
-
 
 
 
@@ -147,6 +146,39 @@ const About: React.FC = () => {
                 <Sparkles className="w-10 h-10 text-white" />
               </motion.div>
             </div>
+
+            {/* NEW: Additional image/design elements */}
+            {/* Abstract Shape 1 */}
+            <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ delay: 1, duration: 0.8 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-32 -left-20 w-48 h-48 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"
+            ></motion.div>
+
+            {/* Abstract Shape 2 */}
+            <motion.div
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.8 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-16 -right-10 w-32 h-32 bg-slate-400 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"
+            ></motion.div>
+
+            {/* Quote Card */}
+            <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.6, duration: 0.8 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-24 -left-8 max-w-[200px] bg-white/90 backdrop-blur-lg rounded-xl p-4 shadow-xl border border-white/20 text-sm italic text-slate-700"
+            >
+                "Innovation distinguishes between a leader and a follower." 
+                <span className="block text-right font-semibold text-purple-600 mt-2">— Steve Jobs</span>
+            </motion.div>
+
+
           </motion.div>
 
           {/* Right Side - Enhanced Content */}
@@ -195,9 +227,10 @@ const About: React.FC = () => {
                 viewport={{ once: true }}
                 className="text-lg text-slate-600 leading-relaxed relative pl-6 border-l-4 border-slate-400"
               >
-                With offices in Melbourne and Xiamen, we bridge Eastern and Western business
-                practices, offering unique insights that drive sustainable success in today's
-                interconnected global economy.
+                Represented in Australia, China, Sri Lanka and the Middle East, 
+                we bridge Eastern and Western business practices, offering unique insights that drive 
+                sustainable success in today's interconnected global economy.
+
               </motion.p>
             </div>
 
@@ -219,7 +252,7 @@ const About: React.FC = () => {
           </a> 
 
             {/* Enhanced Values Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:grid-auto-rows-1fr">
               {values.map((value, index) => (
                 <motion.div
                   key={value.title}
@@ -234,7 +267,7 @@ const About: React.FC = () => {
                   {/* Glow Effect */}
                   <div className={`absolute -inset-2 bg-gradient-to-r ${value.gradient} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}></div>
                   
-                  <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/30 shadow-lg hover:shadow-2xl transition-all duration-500 group-hover:bg-white/90 group-hover:scale-105">
+                  <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/30 shadow-lg hover:shadow-2xl transition-all duration-500 group-hover:bg-white/90 group-hover:scale-105 h-full flex flex-col">
                     {/* Icon Container */}
                     <motion.div
                       animate={hoveredValue === index ? { scale: 1.2, rotate: 360 } : { scale: 1, rotate: 0 }}
@@ -249,7 +282,7 @@ const About: React.FC = () => {
                       {value.title}
                     </h3>
                     
-                    <p className="text-sm text-slate-600 leading-relaxed text-center group-hover:text-slate-700 transition-colors duration-300">
+                    <p className="text-sm text-slate-600 leading-relaxed text-center group-hover:text-slate-700 transition-colors duration-300 flex-grow">
                       {value.description}
                     </p>
 
@@ -367,9 +400,23 @@ const About: React.FC = () => {
           0% { transform: translateX(-100%) skewX(-12deg); }
           100% { transform: translateX(200%) skewX(-12deg); }
         }
+        /* Keyframes for blob animation */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
       `}</style>
     </section>
   );
 };
 
 export default About;
+
+
