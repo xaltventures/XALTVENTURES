@@ -251,7 +251,7 @@ const Services: React.FC = () => {
                 <img 
                   src="/louis_bianco_logo.png" 
                   alt="Louis Bianco" 
-                  onMouseEnter={() => setSelectedPartner('_bianco')}
+                  onMouseEnter={() => setSelectedPartner('louis_bianco')}
                   className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
@@ -304,8 +304,8 @@ const Services: React.FC = () => {
                 <div className="flex justify-between items-center gap-4 mb-4"> {/* <-- CHANGED justify-end and mb-6 to mb-4 */}
                   <img 
                     src={
-                      selectedPartner === 'althinect' ? '/althinect_xalt_logo_1.png' :
-                      selectedPartner === 'louis_bianco' ? '/louis_bianco_xalt_logo.png' :
+                      selectedPartner === 'althinect' ? '/althinect_logo_1.png' :
+                      selectedPartner === 'louis_bianco' ? '/louis_bianco_logo.png' :
                       '/sierra_logo.png'
                     }
                     alt={partnerInfo[selectedPartner as keyof typeof partnerInfo].name}
