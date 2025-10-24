@@ -138,7 +138,8 @@ const GlobalPresence: React.FC = () => {
     if (!mapRef.current) return;
     mapInstanceRef.current = window.L.map(mapRef.current, {
       zoomControl: true,
-      scrollWheelZoom: true,
+      scrollWheelZoom: false, // MODIFICATION: Disable scroll wheel zoom
+      dragging: false, 
     });
     window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
@@ -150,7 +151,8 @@ const GlobalPresence: React.FC = () => {
     if (!fullscreenMapRef.current || fullscreenMapInstanceRef.current) return;
     fullscreenMapInstanceRef.current = window.L.map(fullscreenMapRef.current, {
       zoomControl: true,
-      scrollWheelZoom: true,
+      scrollWheelZoom: false, // MODIFICATION: Disable scroll wheel zoom
+      dragging: false, 
     });
     window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
@@ -294,7 +296,11 @@ const GlobalPresence: React.FC = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => fitAllOffices(mapInstanceRef)}
+                      onClick={() => {
+                        setCurrentIndex(-1); // Deselect any card
+                        fitAllOffices(mapInstanceRef);
+                        if(isFullscreen) fitAllOffices(fullscreenMapInstanceRef);
+                      }}
                       className="p-2.5 bg-purple-50/50 hover:bg-purple-100/70 rounded-lg transition-all duration-300 hover:scale-105 group"
                       title="View all offices"
                     >
@@ -400,7 +406,10 @@ const GlobalPresence: React.FC = () => {
           >
             <div className="absolute top-4 right-4 z-20 flex gap-3">
               <button
-                onClick={() => fitAllOffices(fullscreenMapInstanceRef)}
+                onClick={() => {
+                  setCurrentIndex(-1); // Deselect
+                  fitAllOffices(fullscreenMapInstanceRef);
+                }}
                 className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-purple-100/50"
                 title="View all offices"
               >

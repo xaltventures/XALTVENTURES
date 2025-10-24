@@ -34,7 +34,7 @@ function App() {
             <div className="text-center">
               {/* --- CHANGES START HERE --- */}
               <motion.div
-                initial={{ scale: 0, rotate: -180 }}
+                initial={{ scale: 0, rotate: -180 ,y: 140}}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ duration: 1, ease: 'easeOut' }}
                 className="w-25 h-25 rounded-full flex items-center justify-center mx-auto mb-3" // <-- RESTORED w-25 h-25, kept tight margin
@@ -46,26 +46,21 @@ function App() {
                 />
               </motion.div>
               
-              <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
+                    {/* Replaced the H1 and P tags with this motion.img */}
+
+              <motion.img
+
+                src="/xalt_ventures_word_1.png"
+                alt="XALT VENTURES - Discover Your Potential with Us"
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-2xl font-bold text-white mb-1"
-              >
-                XALT VENTURES
-              </motion.h1>
-              
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 0.8 }}
-                className="text-purple-300 mb-3"
-              >
-                Discover Your Potential with Us
-              </motion.p>
+                className="h-auto mx-auto mb-3 px-4" // Added padding for small screens
+                style={{ maxWidth: '300px', width: '100%' }} // Responsive width
+              />
 
               <motion.div
-                initial={{ width: 0 }}
+                initial={{ width: 0 ,y:-60}}
                 animate={{ width: '200px' }}
                 transition={{ delay: 1.2, duration: 0.8 }}
                 className="h-1 bg-gradient-to-r from-purple-400 to-amber-400 mx-auto rounded-full"

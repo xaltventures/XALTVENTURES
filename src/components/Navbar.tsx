@@ -35,35 +35,29 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* xalt_logo */}
+          {/* Logo Area: Now contains 2.svg and the new PNG */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
-            className="flex items-center space-x-3"
+            // Use space-x-3 to separate the two logo components
+            className="flex items-center space-x-2"
           >
+            {/* Existing 2.svg */}
             <img 
-              src="/1.svg" 
-              alt="Xalt Ventures xalt_logo" 
-              className="w-30 h-20 translate-x-2 translate-y-1"
+              src="/2.svg" 
+              alt="Xalt Ventures Icon" 
+              // Adjusted classes for better alignment next to the PNG
+              className="h-30 w-20 translate-x-6 translate-y-1" 
             />
-            <div className="flex flex-col">
-              <div className="flex items-center">
-                <span className={`text-xl font-bold ${scrolled ? 'text-slate-800' : 'text-white'}`}>
-                  XALT
-                </span>
-                <span className="text-purple-600 text-xl font-bold ml-1">
-                  VENTURES
-                </span>
-              </div>
-              {/* Slogan */}
-              <span 
-                className="text-[10px] text-black mt-1 tracking-widest uppercase"
-                style={{ letterSpacing: '0.15em', lineHeight: '0.2' }}
-              >
-                EMPOWER SUCCESS
-              </span>
-            </div>
+
+            {/* New PNG text replacement */}
+            <img 
+              src="/xalt_ventures_word_1.png" 
+              alt="Xalt Ventures Empower Success Text" 
+              // Set the height for the new PNG logo
+              className="h-40 w-30 translate-x-0.01 translate-y-0.5"
+            />
           </motion.div>
 
           {/* Desktop Menu */}
