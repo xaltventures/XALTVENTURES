@@ -36,10 +36,10 @@ const offices: Office[] = [
   {
     city: 'Xiamen',
     country: 'China',
-    address: 'No.8304 Wanhai Rd 55, Siming District, Xiamen, Fujian 361000, China',
+    address: 'No.B304 Wanhai Rd 55, Siming District, Xiamen, Fujian 361000, China',
     coordinates: [24.4852, 118.1812],
     color: 'from-blue-600 via-cyan-500 to-teal-500',
-    phone: 'N/A',
+    phone: '+86 176 2000 5231',
     email: 'contact@xaltventures.com',
     officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
     timezone: 'CST'
@@ -50,7 +50,7 @@ const offices: Office[] = [
     address: 'P.O Box 55096, Doha-Qatar',
     coordinates: [25.2854, 51.5310],
     color: 'from-amber-600 via-orange-500 to-red-500',
-    phone: 'N/A',
+    phone: '+97 45 525 0660',
     email: 'contact@xaltventures.com',
     officeHours: 'Monday - Thursday, 9:00 AM - 5:00 PM',
     timezone: 'AST'

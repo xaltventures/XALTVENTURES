@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
 
                 {/* Kept smaller margin (mb-4) */}
                 <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: -80 }} // Removed negative 'y'
                 viewport={{ once: true }}
               >
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
           {/* Bottom Bar */}
           {/* Kept smaller margins (mt-8 pt-6) */}
           <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: -90 }}
                 whileInView={{ opacity: 1, y: -90 }} // Removed negative 'y'
                 viewport={{ once: true }}>
           <div className="border-t border-purple-200 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center">
