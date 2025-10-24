@@ -21,8 +21,7 @@ const Footer: React.FC = () => {
               {/* MODIFIED: Reverted to a single, simple animation for the whole block */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }} // Removed negative 'y'
-                transition={{ duration: 0.6 }}
+                whileInView={{ opacity: 1, y: -80 }} // Removed negative 'y'
                 viewport={{ once: true }}
               >
                 {/* --- LOGO SECTION --- */}
@@ -42,6 +41,11 @@ const Footer: React.FC = () => {
                 {/* --- END LOGO SECTION --- */}
 
                 {/* Kept smaller margin (mb-4) */}
+                <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: -80 }} // Removed negative 'y'
+                viewport={{ once: true }}
+              >
                 <p className="text-purple-700 mb-4 leading-relaxed max-w-md">
                   Empowering businesses worldwide with innovative consulting solutions, 
                   strategic guidance, and transformative growth strategies.
@@ -54,6 +58,7 @@ const Footer: React.FC = () => {
                     <Mail className="w-5 h-5" />
                   </a>
                 </div>
+              </motion.div>
               </motion.div> 
               {/* MODIFIED: Removed the second motion.div wrapper that was breaking the layout */}
             </div>
@@ -92,6 +97,10 @@ const Footer: React.FC = () => {
 
           {/* Bottom Bar */}
           {/* Kept smaller margins (mt-8 pt-6) */}
+          <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: -90 }} // Removed negative 'y'
+                viewport={{ once: true }}>
           <div className="border-t border-purple-200 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center">
             <p className="text-purple-600 text-sm">
               © 2024 Xalt Ventures – All Rights Reserved.
@@ -100,6 +109,8 @@ const Footer: React.FC = () => {
               <span className="text-purple-600 text-sm">Melbourne</span>
             </div>
           </div>
+          </motion.div>
+
         </div>
       </footer>
 
