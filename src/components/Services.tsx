@@ -235,13 +235,13 @@ const Services: React.FC = () => {
           
           <div className="relative overflow-hidden">
             {/* Gradient overlays for fade effect */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
             
             {/* Scrolling container */}
             <div className="flex animate-scroll">
-              {/* First set of xalt_logos */}
-              <div className="flex items-center justify-around min-w-full px-8">
+              {/* First set of logos */}
+              <div className="flex items-center justify-around min-w-full px-4 sm:px-8">
                 <img 
                   src="/althinect_logo_1.png" 
                   alt="Althinect" 
@@ -252,17 +252,17 @@ const Services: React.FC = () => {
                   src="/louis_bianco_logo.png" 
                   alt="Louis Bianco" 
                   onMouseEnter={() => setSelectedPartner('louis_bianco')}
-                  className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
+                  className="h-16 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
                   src="/sierra_logo.png" 
                   alt="Sierra" 
                   onMouseEnter={() => setSelectedPartner('sierra')}
-                  className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
+                  className="h-16 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
               </div>
               {/* Duplicate set for seamless loop */}
-              <div className="flex items-center justify-around min-w-full px-8">
+              <div className="flex items-center justify-around min-w-full px-4 sm:px-8">
                 <img 
                   src="/althinect_logo_1.png" 
                   alt="Althinect" 
@@ -273,13 +273,13 @@ const Services: React.FC = () => {
                   src="/louis_bianco_logo.png" 
                   alt="Louis Bianco" 
                   onMouseEnter={() => setSelectedPartner('louis_bianco')}
-                  className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
+                  className="h-16 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
                 <img 
-                  src="/sierra_xalt_logo.png" 
+                  src="/sierra_logo.png" 
                   alt="Sierra" 
                   onMouseEnter={() => setSelectedPartner('sierra')}
-                  className="h-23 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
+                  className="h-16 md:h-24 object-contain transition-all duration-300 hover:scale-110 cursor-pointer" 
                 />
               </div>
             </div>

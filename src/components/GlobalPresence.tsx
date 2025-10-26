@@ -341,7 +341,7 @@ const GlobalPresence: React.FC = () => {
             </motion.div>
 
             {/* Office Cards in a Row */}
-            <div className="flex flex-row gap-4 justify-center">
+            <div className="flex flex-col lg:flex-row gap-4 justify-center">
               {offices.map((office, index) => (
                 <motion.div
                   key={index}
@@ -349,7 +349,7 @@ const GlobalPresence: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
                   viewport={{ once: true }}
-                  className={`flex-1 min-w-0 max-w-xs bg-white/75 backdrop-blur-xl rounded-xl p-6 border border-purple-100/20 card-shadow cursor-pointer group hover:scale-105 hover:bg-white/85 transition-all duration-300 ${currentIndex === index ? 'ring-2 ring-purple-500/50' : ''}`}
+                  className={`w-full lg:flex-1 lg:min-w-0 lg:max-w-xs bg-white/75 backdrop-blur-xl rounded-xl p-6 border border-purple-100/20 card-shadow cursor-pointer group hover:scale-105 hover:bg-white/85 transition-all duration-300 ${currentIndex === index ? 'ring-2 ring-purple-500/50' : ''}`}
                   onClick={() => {
                     setCurrentIndex(index);
                     panToSelectedOffice(index, mapInstanceRef);
