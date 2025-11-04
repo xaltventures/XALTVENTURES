@@ -17,7 +17,7 @@ interface FormData {
 // You can get one from the Google reCAPTCHA admin console.
 // This is Google's official test key and will always pass.
 // ---
-const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+const RECAPTCHA_SITE_KEY = "6LecxQEsAAAAANvPnnmm1PLaO7Xy9_vfuR7UCuAZ";
 
 const ContactForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
