@@ -31,10 +31,9 @@ const offices: Office[] = [
     phone: '+61 3 9653 7364',
     email: 'contact@xaltventures.com',
     officeHours: {
-        days: 'Monday - Friday',
-        open: '9:00 AM',
-        close: '5:00 PM'
-      },
+    days: 'Monday - Friday',
+    time: '9:00 AM - 5:00 PM'
+  }
     timezone: 'AEST'
   },
   {
