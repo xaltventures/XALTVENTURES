@@ -9,36 +9,78 @@ interface FormData {
   email: string;
   message: string;
   file?: FileList;
-  recaptcha: string; // <-- Add recaptcha field
+  recaptcha: string; 
 }
 
 // ---
-// IMPORTANT: Replace this with your own reCAPTCHA v2 Site Key
-// You can get one from the Google reCAPTCHA admin console.
-// This is Google's official test key and will always pass.
+// This is your reCAPTCHA v2 Site Key for the front-end.
+// Keep this as you have it.
 // ---
-const RECAPTCHA_SITE_KEY = "6LecxQEsAAAAANvPnnmm1PLaO7Xy9_vfuR7UCuAZ";
+const RECAPTCHA_SITE_KEY = "6LecxQEsAAAAANvPnnmm1PLaO7Xy9_vfuR7UCuAZ"; // Or your actual site key
+
+// ---
+// IMPORTANT: Replace this with your own Formspree Endpoint URL
+// ---
+const FORMSpree_ENDPOINT = "https://formspree.io/f/xgvpjryb"; 
 
 const ContactForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null); // <-- Create ref for reCAPTCHA
+  const [isSubmitting, setIsSubmitting] = useState(false); // Added for loading state
+  const recaptchaRef = useRef<ReCAPTCHA>(null); 
 
-  // <-- Add 'control' from useForm
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<FormData>();
 
+  // --- THIS IS THE UPDATED ONSUBMIT FUNCTION ---
   const onSubmit = async (data: FormData) => {
-    // In a real app, you would send data.recaptcha (the token) to your backend.
-    // Your backend would then verify this token with Google's API.
-    console.log('Form submitted:', data);
+    setIsSubmitting(true); // Show loading feedback on button
+
+    // Create a FormData object to send data, which is necessary for file uploads
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('message', data.message);
     
-    setIsSubmitted(true);
+    // Append the file if it exists
+    if (data.file && data.file.length > 0) {
+      formData.append('file', data.file[0]);
+    }
     
+    // Append the reCAPTCHA token using the key Formspree expects
+    formData.append('g-recaptcha-response', data.recaptcha);
+
+    try {
+      const response = await fetch(FORMSpree_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json' // Tells Formspree to send us JSON back
+        }
+      });
+
+      if (response.ok) {
+        // --- Success ---
+        setIsSubmitted(true);
+        recaptchaRef.current?.reset();
+        reset();
+      } else {
+        // --- Handle Server Error ---
+        console.error('Formspree submission error:', await response.json());
+        alert('There was an error sending your message. Please try again.');
+      }
+    } catch (error) {
+      // --- Handle Network Error ---
+      console.error('Form submission network error:', error);
+      alert('There was a network error. Please check your connection and try again.');
+    }
+
+    setIsSubmitting(false); // Stop loading state
+
+    // Reset the "Submitted" message after 3 seconds
     setTimeout(() => {
       setIsSubmitted(false);
-      recaptchaRef.current?.reset(); // <-- Reset the reCAPTCHA widget
-      reset(); // <-- Reset the form fields
     }, 3000);
   };
+  // --- END OF UPDATED ONSUBMIT FUNCTION ---
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-br from-slate-50 to-purple-50">
@@ -80,6 +122,7 @@ const ContactForm: React.FC = () => {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* --- All form fields are unchanged --- */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -90,6 +133,7 @@ const ContactForm: React.FC = () => {
                     {...register('name', { required: 'Name is required' })}
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                     placeholder="Your full name"
+                    disabled={isSubmitting}
                   />
                   {errors.name && (
                     <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -111,6 +155,7 @@ const ContactForm: React.FC = () => {
                     })}
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                     placeholder="your.email@company.com"
+                    disabled={isSubmitting}
                   />
                   {errors.email && (
                     <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -127,6 +172,7 @@ const ContactForm: React.FC = () => {
                   rows={6}
                   className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none"
                   placeholder="Tell us about your business challenges and how we can help..."
+                  disabled={isSubmitting}
                 />
                 {errors.message && (
                   <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
@@ -142,6 +188,7 @@ const ContactForm: React.FC = () => {
                     type="file"
                     {...register('file')}
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                    disabled={isSubmitting}
                   />
                   <Upload className="absolute right-3 top-3 w-5 h-5 text-slate-400 pointer-events-none" />
                 </div>
@@ -172,10 +219,20 @@ const ContactForm: React.FC = () => {
                 type="submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold py-4 px-8 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold py-4 px-8 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 disabled:opacity-50"
+                disabled={isSubmitting} // Disable button while submitting
               >
-                <span>Drop Us a Line!</span>
-                <Send className="w-5 h-5" />
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Drop Us a Line!</span>
+                    <Send className="w-5 h-5" />
+                  </>
+                )}
               </motion.button>
             </form>
           )}
@@ -186,4 +243,3 @@ const ContactForm: React.FC = () => {
 };
 
 export default ContactForm;
-
