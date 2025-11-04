@@ -30,10 +30,7 @@ const offices: Office[] = [
     color: 'from-purple-600 via-pink-500 to-magenta-500',
     phone: '+61 3 9653 7364',
     email: 'contact@xaltventures.com',
-    officeHours: {
-    days: 'Monday - Friday',
-    time: '9:00 AM - 5:00 PM'
-  }
+    officeHours: 'Monday - Friday, 9:00 AM - 5:00 PM',
     timezone: 'AEST'
   },
   {
