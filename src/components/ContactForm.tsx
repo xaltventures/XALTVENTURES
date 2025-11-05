@@ -179,21 +179,7 @@ const ContactForm: React.FC = () => {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  File Attachment (Optional)
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    {...register('file')}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                    disabled={isSubmitting}
-                  />
-                  <Upload className="absolute right-3 top-3 w-5 h-5 text-slate-400 pointer-events-none" />
-                </div>
-              </div>
-
+              
               {/* --- reCAPTCHA Component --- */}
               <div>
                 <Controller
