@@ -248,18 +248,21 @@ const GlobalPresence: React.FC = () => {
             font-family: 'Inter', sans-serif;
           }
           .card-shadow {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(0,0,0,0.05);
           }
           .card-shadow:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(124, 58, 237, 0.2);
           }
         `}
       </style>
-      <section id="global" className="py-16 bg-gradient-to-br from-purple-50/50 via-white to-purple-100/50 text-slate-900 relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/3 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-1/3 w-80 h-80 bg-purple-300/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
+      
+      {/* Changed bg-gradient... to bg-white, removed purple tint from background */}
+      <section id="global" className="py-16 bg-white text-slate-900 relative overflow-hidden">
+        
+        {/* Animated Background Elements - Made much more subtle for white theme */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/3 w-80 h-80 bg-purple-100/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/3 w-80 h-80 bg-purple-100/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -287,12 +290,15 @@ const GlobalPresence: React.FC = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-200/30 to-purple-300/30 rounded-2xl blur-xl opacity-50"></div>
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-purple-100/50">
+              {/* Changed blur opacity to be very subtle */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 to-purple-200/20 rounded-2xl blur-xl opacity-30"></div>
+              
+              {/* Changed bg-white/90 to bg-white and added stronger border */}
+              <div className="relative bg-white rounded-2xl p-5 shadow-xl border border-slate-200">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Global Offices</h3>
-                    <p className="text-sm text-slate-600 font-light">Select a marker or card to explore</p>
+                    <p className="text-sm text-slate-500 font-light">Select a marker or card to explore</p>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -301,39 +307,39 @@ const GlobalPresence: React.FC = () => {
                         fitAllOffices(mapInstanceRef);
                         if(isFullscreen) fitAllOffices(fullscreenMapInstanceRef);
                       }}
-                      className="p-2.5 bg-purple-50/50 hover:bg-purple-100/70 rounded-lg transition-all duration-300 hover:scale-105 group"
+                      className="p-2.5 bg-slate-50 hover:bg-purple-50 rounded-lg transition-all duration-300 hover:scale-105 group border border-slate-200 hover:border-purple-200"
                       title="View all offices"
                     >
-                      <Globe className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                      <Globe className="w-5 h-5 text-slate-600 group-hover:text-purple-600 transition-colors" />
                     </button>
                     <button
                       onClick={toggleFullscreen}
-                      className="p-2.5 bg-purple-50/50 hover:bg-purple-100/70 rounded-lg transition-all duration-300 hover:scale-105 group"
+                      className="p-2.5 bg-slate-50 hover:bg-purple-50 rounded-lg transition-all duration-300 hover:scale-105 group border border-slate-200 hover:border-purple-200"
                       title="Toggle fullscreen"
                     >
                       {isFullscreen ? (
-                        <Minimize2 className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                        <Minimize2 className="w-5 h-5 text-slate-600 group-hover:text-purple-600 transition-colors" />
                       ) : (
-                        <Maximize2 className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                        <Maximize2 className="w-5 h-5 text-slate-600 group-hover:text-purple-600 transition-colors" />
                       )}
                     </button>
                   </div>
                 </div>
-                <div className="relative bg-white rounded-xl overflow-hidden border border-purple-100/50 shadow-md">
+                <div className="relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-inner">
                   <div ref={mapRef} className="w-full h-[400px]" />
                   {!isMapLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/95">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white">
                       <div className="text-center">
                         <div className="relative w-12 h-12 mx-auto mb-3">
-                          <div className="absolute inset-0 border-2 border-purple-200 rounded-full"></div>
+                          <div className="absolute inset-0 border-2 border-slate-200 rounded-full"></div>
                           <div className="absolute inset-0 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
                         </div>
-                        <p className="text-slate-600 font-medium text-sm">Loading map...</p>
+                        <p className="text-slate-500 font-medium text-sm">Loading map...</p>
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-600">
+                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500">
                   <span className="inline-block w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
                   <span>Click markers to explore our offices</span>
                 </div>
@@ -349,7 +355,8 @@ const GlobalPresence: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
                   viewport={{ once: true }}
-                  className={`w-full lg:flex-1 lg:min-w-0 lg:max-w-xs bg-white/75 backdrop-blur-xl rounded-xl p-6 border border-purple-100/20 card-shadow cursor-pointer group hover:scale-105 hover:bg-white/85 transition-all duration-300 ${currentIndex === index ? 'ring-2 ring-purple-500/50' : ''}`}
+                  /* Changed background to solid white, removed blur, updated border and shadow */
+                  className={`w-full lg:flex-1 lg:min-w-0 lg:max-w-xs bg-white rounded-xl p-6 border border-slate-200 card-shadow cursor-pointer group hover:-translate-y-1 transition-all duration-300 ${currentIndex === index ? 'ring-2 ring-purple-500/50 border-purple-200' : ''}`}
                   onClick={() => {
                     setCurrentIndex(index);
                     panToSelectedOffice(index, mapInstanceRef);
@@ -365,21 +372,21 @@ const GlobalPresence: React.FC = () => {
                     </div>
                     <div className="flex items-start gap-2">
                       <MapPin className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                      <p className="text-slate-700 text-sm leading-relaxed">{office.address}</p>
+                      <p className="text-slate-600 text-sm leading-relaxed">{office.address}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="w-4 h-4 text-purple-600" />
-                      <p className="text-slate-700 text-sm">{office.phone}</p>
+                      <p className="text-slate-600 text-sm">{office.phone}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-purple-600" />
-                      <a href={`mailto:${office.email}`} className="text-slate-700 text-sm truncate hover:underline">{office.email}</a>
+                      <a href={`mailto:${office.email}`} className="text-slate-600 text-sm truncate hover:text-purple-600 hover:underline transition-colors">{office.email}</a>
                     </div>
                     <div className="flex items-start gap-2">
                       <Clock className="w-4 h-4 text-purple-600 mt-0.5" />
                       <div>
-                        <p className="text-slate-700 text-sm">{office.officeHours}</p>
-                        <p className="text-slate-600 text-sm">{office.timezone} Time</p>
+                        <p className="text-slate-600 text-sm">{office.officeHours}</p>
+                        <p className="text-slate-500 text-sm">{office.timezone} Time</p>
                       </div>
                     </div>
                   </div>
@@ -396,13 +403,13 @@ const GlobalPresence: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-gray-900/95 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4"
         >
           <motion.div
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.95 }}
-            className="bg-white/95 rounded-2xl shadow-2xl w-full h-full max-w-[95vw] max-h-[95vh] relative overflow-hidden border border-purple-100/50"
+            className="bg-white rounded-2xl shadow-2xl w-full h-full max-w-[95vw] max-h-[95vh] relative overflow-hidden border border-slate-200"
           >
             <div className="absolute top-4 right-4 z-20 flex gap-3">
               <button
@@ -410,14 +417,14 @@ const GlobalPresence: React.FC = () => {
                   setCurrentIndex(-1); // Deselect
                   fitAllOffices(fullscreenMapInstanceRef);
                 }}
-                className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-purple-100/50"
+                className="bg-white hover:bg-slate-50 rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-slate-200"
                 title="View all offices"
               >
                 <Globe className="w-5 h-5 text-purple-600" />
               </button>
               <button
                 onClick={toggleFullscreen}
-                className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-purple-100/50"
+                className="bg-white hover:bg-slate-50 rounded-lg p-3 shadow-md transition-all duration-300 hover:scale-105 border border-slate-200"
                 title="Exit fullscreen"
               >
                 <Minimize2 className="w-5 h-5 text-purple-600" />
