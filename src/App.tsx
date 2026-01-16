@@ -81,9 +81,9 @@ function App() {
           <ParticlesBackground />
           <Navbar />
           <Hero />
+          <Opportunities />
           <About />
           <Services />
-          <Opportunities />
           <GlobalPresence />
           <ContactForm />
           <Footer />
