@@ -63,24 +63,6 @@ const About: React.FC = () => {
 
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ 
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-purple-200 to-purple-300 rounded-full opacity-20 blur-xl"
-        />
-        <motion.div
-          animate={{ 
-            x: [0, -80, 0],
-            y: [0, 100, 0],
-            rotate: [360, 180, 0]
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full opacity-15 blur-xl"
-        />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -147,24 +129,7 @@ const About: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* NEW: Additional image/design elements */}
-            {/* Abstract Shape 1 */}
-            <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ delay: 1, duration: 0.8 }}
-                viewport={{ once: true }}
-                className="absolute -bottom-32 -left-20 w-48 h-48 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"
-            ></motion.div>
 
-            {/* Abstract Shape 2 */}
-            <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 1.2, duration: 0.8 }}
-                viewport={{ once: true }}
-                className="absolute -bottom-16 -right-10 w-32 h-32 bg-slate-400 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"
-            ></motion.div>
 
             {/* Quote Card */}
             <motion.div
@@ -201,10 +166,8 @@ const About: React.FC = () => {
               <span>About Xalt Ventures</span>
             </motion.div>
 
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-slate-800 via-purple-600 to-slate-900 bg-clip-text text-transparent">
-                Our Story
-              </span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+              Our Story
             </h2>
             
             <div className="space-y-6 mb-10">
