@@ -9,7 +9,7 @@ const Opportunities: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
 
   const adSlides = [
-  
+ 
     {
       id: 'construction-ad',
       src: '/Construction Partner.png',
@@ -59,10 +59,9 @@ const Opportunities: React.FC = () => {
             SECTION HEADER
            ========================================== */}
         <div className="mb-12 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
             Opportunities
           </h2>
-          <div className="w-20 h-1 bg-violet-600 mx-auto rounded-full"></div>
           <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-lg">
             Explore strategic partnerships and business opportunities with our global network.
           </p>
