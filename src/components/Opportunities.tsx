@@ -9,12 +9,7 @@ const Opportunities: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
 
   const adSlides = [
-    {
-      id: 'partner-ad',
-      src: '/OPPORTUNITY TO PARTNER.svg',
-      title: 'Strategic Partnership',
-      duration: 5000,
-    },
+  
     {
       id: 'construction-ad',
       src: '/Construction Partner.png',
