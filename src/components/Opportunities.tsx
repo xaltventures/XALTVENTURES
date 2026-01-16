@@ -9,7 +9,12 @@ const Opportunities: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
 
   const adSlides = [
- 
+    {
+      id: 'partner-ad',
+      src: '/OPPORTUNITY TO PARTNER.svg',
+      title: 'Strategic Partnership',
+      duration: 5000,
+    },
     {
       id: 'construction-ad',
       src: '/Construction Partner.png',
@@ -49,7 +54,7 @@ const Opportunities: React.FC = () => {
       
       {/* Background Particles (Light Theme) */}
       <div className="absolute inset-0 opacity-30 pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-violet-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+        {/* Left-side ball removed */}
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-amber-100 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
       </div>
 
@@ -73,7 +78,7 @@ const Opportunities: React.FC = () => {
            ========================================== */}
         <div className="relative">
           
-          {/* Interactive Card Container - INCREASED HEIGHT HERE */}
+          {/* Interactive Card Container */}
           <div 
             className="relative h-[500px] md:h-[700px] flex items-center justify-center"
             onMouseEnter={() => setIsPaused(true)}
@@ -89,13 +94,13 @@ const Opportunities: React.FC = () => {
                 transition={{ type: "spring", stiffness: 200, damping: 25 }}
                 className="absolute inset-0 w-full h-full"
               >
-                {/* Glass Card (Light Mode) - INCREASED MAX-WIDTH & REDUCED PADDING */}
+                {/* Glass Card (Light Mode) */}
                 <div className="w-full h-full max-w-7xl mx-auto rounded-3xl bg-white/60 backdrop-blur-xl border border-slate-200 shadow-2xl shadow-slate-200/50 overflow-hidden relative group transition-all duration-300 hover:shadow-violet-200/50 hover:border-violet-200">
                   
                   {/* Hover Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
-                  {/* Content Wrapper - Reduced padding to p-4 to maximize image size */}
+                  {/* Content Wrapper */}
                   <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
                      {/* Image */}
                     <img 
